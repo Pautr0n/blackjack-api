@@ -6,13 +6,13 @@ import cat.itacademy.blackjack.game.domain.model.Hand;
 public class DealerService {
 
     public Hand playDealerTurn(Hand dealerHand, Deck deck) {
-        Hand current = dealerHand;
+        Hand hand = dealerHand;
 
-        while (current.score() < 17) {
-            current = current.addCard(deck.draw());
+        while (hand.score() < 17) {
+            hand = hand.addCard(deck.draw());
         }
 
-        return current;
+        return hand;
     }
 
 }
