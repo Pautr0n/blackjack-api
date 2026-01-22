@@ -13,6 +13,11 @@ public class Deck {
     }
 
     public Card draw() {
+        //Include to GlobalHandlerException
+        if (cards.isEmpty()) {
+            throw new IllegalStateException("Cannot draw from an empty deck");
+        }
+
         return cards.pop();
     }
 
@@ -24,6 +29,10 @@ public class Deck {
             }
         }
         return new Deck(cards);
+    }
+
+    public List<Card> getCards() {
+        return List.copyOf(cards);
     }
 
 }
