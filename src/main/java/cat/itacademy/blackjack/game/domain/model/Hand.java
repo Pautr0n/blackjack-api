@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Hand {
+public record Hand (List<Card> cards){
 
-    private final List<Card> cards;
 
-    public Hand(List<Card> cards) {
-        this.cards = List.copyOf(cards);
+    public Hand{
+        cards = List.copyOf(cards);
     }
 
-    public Hand add(Card card) {
+    public static Hand empty() {
+        return new Hand(List.of());
+    }
+
+    public Hand addCard(Card card) {
         List<Card> newCards = new ArrayList<>(cards);
         newCards.add(card);
         return new Hand(newCards);
@@ -37,6 +40,10 @@ public class Hand {
 
     public boolean isBust() {
         return score() > 21;
+    }
+
+    public boolean isBlackjack() {
+        return cards.size() == 2 && score() == 21;
     }
 
     public List<Card> cards() {

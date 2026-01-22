@@ -35,7 +35,7 @@ public class Game {
         if (status != GameStatus.IN_PROGRESS) {
             return this;
         }
-        Hand newPlayerHand = playerHand.add(deck.draw());
+        Hand newPlayerHand = playerHand.addCard(deck.draw());
         GameStatus newStatus = newPlayerHand.isBust() ? GameStatus.PLAYER_BUST : status;
         return new Game(id, playerId, newPlayerHand, dealerHand, deck, newStatus);
     }

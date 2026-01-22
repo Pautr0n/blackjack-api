@@ -9,7 +9,7 @@ public class DealerService {
         Hand current = dealerHand;
 
         while (current.score() < 17) {
-            current = current.add(deck.draw());
+            current = current.addCard(deck.draw());
         }
 
         return current;
