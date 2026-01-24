@@ -2,8 +2,6 @@ package cat.itacademy.blackjack.game.domain.model;
 
 import cat.itacademy.blackjack.game.domain.service.DealerService;
 
-import java.util.List;
-
 public class Game {
 
     private final GameId id;

@@ -13,7 +13,7 @@ public class DeleteGameService implements DeleteGameUseCase {
     }
 
     @Override
-    public Mono<Void> delete(String gameId) {
+    public Mono<Void> deleteById(String gameId) {
         return gameRepository.deleteById(gameId);
     }
 

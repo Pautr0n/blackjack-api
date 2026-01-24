@@ -4,6 +4,6 @@ import reactor.core.publisher.Mono;
 
 public interface DeleteGameUseCase {
 
-    Mono<Void> delete(String gameId);
+    Mono<Void> deleteById(String gameId);
 
 }
