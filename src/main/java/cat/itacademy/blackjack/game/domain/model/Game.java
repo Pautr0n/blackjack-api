@@ -37,6 +37,16 @@ public class Game {
         return new Game(id, playerId, player, dealer, deck, GameStatus.IN_PROGRESS);
     }
 
+    public static Game restore(GameId id,
+                               String playerId,
+                               Hand playerHand,
+                               Hand dealerHand,
+                               Deck deck,
+                               GameStatus status) {
+
+        return new Game(id, playerId, playerHand, dealerHand, deck, status);
+    }
+
     public Game hit() {
         if (status != GameStatus.IN_PROGRESS) {
             return this;
@@ -86,8 +96,9 @@ public class Game {
         return status;
     }
 
-    public Deck getDeck(){
+    public Deck deck(){
         return deck;
+
     }
 
 }
