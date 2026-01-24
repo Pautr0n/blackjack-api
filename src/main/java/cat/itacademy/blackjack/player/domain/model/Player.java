@@ -24,6 +24,10 @@ public class Player {
         return new Player(PlayerId.newId(), name, 0);
     }
 
+    public static Player restore(PlayerId playerid, String name, int score){
+        return new Player(playerid, name, score);
+    }
+
 
     public Player rename(String newName) {
         return new Player(id, newName, score);
