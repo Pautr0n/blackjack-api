@@ -58,7 +58,7 @@ class CreatePlayerServiceTest {
 
         InvalidPlayerNameException ex = assertThrows(
                 InvalidPlayerNameException.class,
-                () -> createPlayerService.create(invalidName) // se lanza aquí, antes del Mono
+                () -> createPlayerService.create(invalidName)
         );
 
         assertEquals("Player name must have at least 3 characters", ex.getMessage());
