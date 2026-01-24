@@ -5,20 +5,20 @@ import cat.itacademy.blackjack.game.domain.model.GameId;
 import cat.itacademy.blackjack.game.domain.port.in.CreateGameUseCase;
 import cat.itacademy.blackjack.game.domain.port.out.DeckFactory;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
-import cat.itacademy.blackjack.game.domain.port.out.PlayerRepository;
+import cat.itacademy.blackjack.game.domain.port.out.PlayerLookupPort;
 import cat.itacademy.blackjack.player.domain.model.Player;
 import reactor.core.publisher.Mono;
 
 public class CreateGameService implements CreateGameUseCase {
 
-    private final PlayerRepository playerRepository;
+    private final PlayerLookupPort playerLookupPort;
     private final GameRepository gameRepository;
     private final DeckFactory deckFactory;
 
-    public CreateGameService(PlayerRepository playerRepository,
+    public CreateGameService(PlayerLookupPort playerLookupPort,
                              GameRepository gameRepository,
                              DeckFactory deckFactory) {
-        this.playerRepository = playerRepository;
+        this.playerLookupPort = playerLookupPort;
         this.gameRepository = gameRepository;
         this.deckFactory = deckFactory;
     }
@@ -26,22 +26,17 @@ public class CreateGameService implements CreateGameUseCase {
 
     @Override
     public Mono<Game> create(String playerName) {
-        return playerRepository.findByName(playerName)
-                .switchIfEmpty(Mono.defer(()->createNewPlayer(playerName)))
-                .flatMap(player -> {
+        return playerLookupPort.findByName(playerName)
+                .switchIfEmpty(Mono.error(new RuntimeException("Player does not exist")))
+                .flatMap(playerInfo -> {
                     Game game = Game.start(
                             GameId.newId(),
-                            player.id().value(),
+                            playerInfo.id(),
                             deckFactory.create()
                     );
                     return gameRepository.save(game);
                 });
 
-    }
-
-    private Mono<Player> createNewPlayer(String name) {
-        Player newPlayer = Player.create(name);
-        return playerRepository.save(newPlayer);
     }
 
 }

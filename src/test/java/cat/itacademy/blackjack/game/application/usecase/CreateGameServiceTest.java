@@ -3,7 +3,8 @@ package cat.itacademy.blackjack.game.application.usecase;
 import cat.itacademy.blackjack.game.domain.model.*;
 import cat.itacademy.blackjack.game.domain.port.out.DeckFactory;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
-import cat.itacademy.blackjack.game.domain.port.out.PlayerRepository;
+import cat.itacademy.blackjack.game.domain.port.out.PlayerInfo;
+import cat.itacademy.blackjack.game.domain.port.out.PlayerLookupPort;
 import cat.itacademy.blackjack.player.domain.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
 class CreateGameServiceTest {
 
     @Mock
-    private PlayerRepository playerRepository;
+    private PlayerLookupPort playerLookupPort;
 
     @Mock
     private GameRepository gameRepository;
@@ -30,13 +31,10 @@ class CreateGameServiceTest {
     private DeckFactory deckFactory;
 
     @InjectMocks
-    private CreateGameService service;
+    private CreateGameService createGameService;
 
     @BeforeEach
     void setup() {
-        lenient().when(playerRepository.save(any(Player.class)))
-                .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
         lenient().when(gameRepository.save(any(Game.class)))
                 .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
     }
@@ -45,9 +43,9 @@ class CreateGameServiceTest {
     @Test
     void creates_game_for_existing_player() {
         String playerName = "Pau";
-        Player existingPlayer = Player.create(playerName);
+        PlayerInfo existingPlayer = new PlayerInfo("1234","Pau",0);
 
-        when(playerRepository.findByName(anyString()))
+        when(playerLookupPort.findByName(anyString()))
                 .thenReturn(Mono.just(existingPlayer));
 
         Deck deck = mock(Deck.class);
@@ -59,60 +57,26 @@ class CreateGameServiceTest {
                 new Card(Rank.FIVE, Suit.SPADES)
         );
 
-        StepVerifier.create(service.create(playerName))
+        StepVerifier.create(createGameService.create(playerName))
                 .assertNext(game -> {
-                    assertThat(game.playerId()).isEqualTo(existingPlayer.id().value());
+                    assertThat(game.playerId()).isEqualTo(existingPlayer.id());
                     assertThat(game.status()).isEqualTo(GameStatus.IN_PROGRESS);
                 })
                 .verifyComplete();
 
-        verify(playerRepository).findByName(anyString());
-        verify(playerRepository, never()).save(any());
+        verify(playerLookupPort).findByName(anyString());
         verify(deckFactory).create();
         verify(gameRepository).save(any(Game.class));
 
     }
 
-    @Test
-    void creates_player_if_not_exists_and_then_creates_game() {
-        String playerName = "NewPlayer";
-
-        when(playerRepository.findByName(eq(playerName)))
-                .thenReturn(Mono.empty());
-
-        Player createdPlayer = Player.create(playerName);
-
-        when(playerRepository.save(any(Player.class)))
-                .thenReturn(Mono.just(createdPlayer));
-
-        Deck deck = mock(Deck.class);
-        when(deckFactory.create()).thenReturn(deck);
-
-        when(deck.draw()).thenReturn(
-                new Card(Rank.FOUR, Suit.SPADES),
-                new Card(Rank.THREE, Suit.CLUBS),
-                new Card(Rank.SEVEN, Suit.HEARTS)
-        );
-
-        StepVerifier.create(service.create(playerName))
-                .assertNext(game -> {
-                    assertThat(game.playerId()).isEqualTo(createdPlayer.id().value());
-                    assertThat(game.status()).isEqualTo(GameStatus.IN_PROGRESS);
-                })
-                .verifyComplete();
-
-        verify(playerRepository).findByName(eq(playerName));
-        verify(playerRepository).save(any(Player.class));
-        verify(deckFactory).create();
-        verify(gameRepository).save(any(Game.class));
-    }
 
     @Test
     void uses_deck_from_factory() {
         String playerName = "Pau";
         Player existingPlayer = Player.create(playerName);
 
-        when(playerRepository.findByName(eq(playerName)))
+        when(playerLookupPort.findByName(eq(playerName)))
                 .thenReturn(Mono.just(existingPlayer));
 
         Deck deck = mock(Deck.class);
@@ -124,7 +88,7 @@ class CreateGameServiceTest {
                 new Card(Rank.THREE, Suit.CLUBS)
         );
 
-        StepVerifier.create(service.create(playerName))
+        StepVerifier.create(createGameService.create(playerName))
                 .assertNext(game -> {
                     assertThat(game.getDeck()).isSameAs(deck);
                 })
