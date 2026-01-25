@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PlayerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Mono<ErrorResponse> handlePlayerNotFound(InvalidPlayerScoreException ex) {
+    public Mono<ErrorResponse> handlePlayerNotFound(PlayerNotFoundException ex) {
         return Mono.just(new ErrorResponse(
                 "PLAYER_NOT_FOUND",
                 ex.getMessage()
