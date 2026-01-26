@@ -25,7 +25,7 @@ public class PlayerApiMapper {
 
     public static PlayerResponse fromSummary(PlayerSummary summary) {
         return new PlayerResponse(
-                summary.id(),
+                summary.domainId(),
                 summary.name(),
                 summary.score()
         );

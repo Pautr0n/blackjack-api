@@ -19,7 +19,7 @@ public class FindAllPlayersService implements FindAllPlayersUseCase {
     public Flux<Player> findAll() {
         return queryRepository.findAll()
                 .map(summary -> Player.restore(
-                        new PlayerId(summary.id()),
+                        new PlayerId(summary.domainId()),
                         summary.name(),
                         summary.score()
                 ));

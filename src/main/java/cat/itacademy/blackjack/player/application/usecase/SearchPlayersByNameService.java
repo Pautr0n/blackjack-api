@@ -19,7 +19,7 @@ public class SearchPlayersByNameService implements SearchPlayerByNameUseCase {
     public Flux<Player> searchByName(String partialName) {
         return queryRepository.searchByName(partialName)
                 .map(summary -> Player.restore(
-                        new PlayerId(summary.id()),
+                        new PlayerId(summary.domainId()),
                         summary.name(),
                         summary.score()
                 ));
