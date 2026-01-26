@@ -11,6 +11,7 @@ import cat.itacademy.blackjack.game.infrastructure.in.web.mapper.PlayApiMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class GameController {
                     @ApiResponse(responseCode = "404", description = "Player not found")
             }
     )
-    public Mono<ResponseEntity<GameResponse>> create(@RequestBody CreateGameRequest request) {
+    public Mono<ResponseEntity<GameResponse>> create(@Valid @RequestBody CreateGameRequest request) {
         return createGame.create(request.playerId())
                 .map(GameApiMapper::fromDomain)
                 .map(body -> ResponseEntity.status(HttpStatus.CREATED).body(body));
@@ -75,7 +76,7 @@ public class GameController {
             }
     )
     public Mono<ResponseEntity<GameResponse>> play(@PathVariable String id,
-                                                   @RequestBody PlayRequest request) {
+                                                   @Valid @RequestBody PlayRequest request) {
         return playMove.play(id, PlayApiMapper.toDomain(request))
                 .map(GameApiMapper::fromDomain)
                 .map(ResponseEntity::ok);

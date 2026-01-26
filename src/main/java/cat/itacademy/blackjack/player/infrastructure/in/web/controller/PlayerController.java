@@ -9,6 +9,7 @@ import cat.itacademy.blackjack.player.infrastructure.in.web.mapper.PlayerApiMapp
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class PlayerController {
                     @ApiResponse(responseCode = "400", description = "Invalid player name")
             }
     )
-    public Mono<ResponseEntity<PlayerResponse>> create(@RequestBody CreatePlayerRequest request) {
+    public Mono<ResponseEntity<PlayerResponse>> create(@Valid @RequestBody CreatePlayerRequest request) {
         return createPlayer.create(request.name())
                 .map(PlayerApiMapper::fromDomain)
                 .map(ResponseEntity::ok);
