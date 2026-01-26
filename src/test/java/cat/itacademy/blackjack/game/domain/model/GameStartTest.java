@@ -1,8 +1,9 @@
 package cat.itacademy.blackjack.game.domain.model;
 
-import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +15,8 @@ class GameStartTest {
 
     @BeforeEach
     void setUp(){
-        deck = Deck.standard52Cards();
+        List<Card> cards = Deck.standard52Cards();
+        deck = new Deck(cards);
         gameId = GameId.newId();
         playerId = "player-123";
 
@@ -51,7 +53,9 @@ class GameStartTest {
 
     @Test
     void starting_a_game_returns_new_game_instance() {
-        Deck deck = Deck.standard52Cards();
+        List<Card> cards = Deck.standard52Cards();
+        Deck deck = new Deck(cards);
+
 
         Game game1 = Game.start(gameId, playerId, deck);
         Game game2 = Game.start(gameId, playerId, deck);

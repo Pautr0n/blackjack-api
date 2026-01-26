@@ -28,7 +28,7 @@ class GameRepositoryAdapterTest {
 
     @BeforeAll
     static void initialSetUp(){
-        deck = Deck.standard52Cards();
+        deck =  new Deck(Deck.standard52Cards());
     }
 
     @Test
@@ -70,7 +70,7 @@ class GameRepositoryAdapterTest {
         when(mongoRepo.findById("123")).thenReturn(Mono.empty());
 
         StepVerifier.create(adapter.findById(new GameId("123")))
-                .verifyComplete();
+                .verifyError();
 
         verify(mongoRepo).findById("123");
 

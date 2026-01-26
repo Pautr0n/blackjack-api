@@ -7,9 +7,7 @@ public class Deck {
     private final Deque<Card> cards;
 
     public Deck(List<Card> cards) {
-        List<Card> copy = new ArrayList<>(cards);
-        Collections.shuffle(copy);
-        this.cards = new ArrayDeque<>(copy);
+        this.cards = new ArrayDeque<>(cards);
     }
 
     public Card draw() {
@@ -21,14 +19,14 @@ public class Deck {
         return cards.pop();
     }
 
-    public static Deck standard52Cards() {
+    public static List<Card> standard52Cards() {
         List<Card> cards = new ArrayList<>();
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
                 cards.add(new Card(rank, suit));
             }
         }
-        return new Deck(cards);
+        return cards;
     }
 
     public List<Card> getCards() {

@@ -40,7 +40,7 @@ class GameControllerTest {
 
     @Test
     void create_game_returns_GameResponse() {
-        Game domainGame = Game.start(GameId.newId(), "1224", Deck.standard52Cards());
+        Game domainGame = Game.start(GameId.newId(), "1224", new Deck(Deck.standard52Cards()));
 
         when(createGame.create(anyString())).thenReturn(Mono.just(domainGame));
 
@@ -62,7 +62,7 @@ class GameControllerTest {
         Game domainGame = Game.start(
                 new GameId("g1"),
                 "p1",
-                Deck.standard52Cards()
+                new Deck(Deck.standard52Cards())
         );
 
         when(getGame.getById("g1"))
@@ -93,7 +93,7 @@ class GameControllerTest {
         Game updatedGame = Game.start(
                 new GameId("g1"),
                 "p1",
-                Deck.standard52Cards()
+                new Deck(Deck.standard52Cards())
         ).hit();
 
         when(playMove.play(eq("g1"), any()))
@@ -114,7 +114,7 @@ class GameControllerTest {
         Game updatedGame = Game.start(
                 new GameId("g1"),
                 "p1",
-                Deck.standard52Cards()
+                new Deck(Deck.standard52Cards())
         );
 
         when(playMove.play(eq("g1"), any()))

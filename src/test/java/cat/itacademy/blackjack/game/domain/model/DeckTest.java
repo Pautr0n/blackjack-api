@@ -13,22 +13,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DeckTest {
 
     @Test
-    void standard_deck_has_52_cards() {
-        Deck deck = Deck.standard52Cards();
+    void standard_deck_list_has_52_cards() {
+        List<Card> cards = Deck.standard52Cards();
 
-        assertThat(deck.getCards()).hasSize(52);
+        assertThat(cards).hasSize(52);
     }
 
     @Test
-    void standard_deck_has_52_unique_cards() {
-        Deck deck = Deck.standard52Cards();
+    void standard_deck_list_has_52_unique_cards() {
+        List<Card> cards = Deck.standard52Cards();
 
-        assertThat(deck.getCards()).doesNotHaveDuplicates();
+        assertThat(cards).doesNotHaveDuplicates();
     }
 
     @Test
     void drawing_a_card_reduces_deck_size_by_one() {
-        Deck deck = Deck.standard52Cards();
+        List<Card> cards = Deck.standard52Cards();
+        Deck deck = new Deck(cards);
 
         assertThat(deck.getCards()).hasSize(52);
 
@@ -39,7 +40,6 @@ class DeckTest {
         Card second = deck.draw();
         assertThat(second).isNotNull();
         assertThat(deck.getCards()).hasSize(50);
-
     }
 
     @Test
@@ -52,7 +52,6 @@ class DeckTest {
 
     @Test
     void deck_draws_cards_in_fifo_order() {
-
         List<Card> cards = List.of(
                 new Card(Rank.TWO, Suit.CLUBS),
                 new Card(Rank.THREE, Suit.DIAMONDS),
@@ -69,5 +68,6 @@ class DeckTest {
         assertThat(c2.rank()).isEqualTo(Rank.THREE);
         assertThat(c3.rank()).isEqualTo(Rank.FOUR);
     }
+
 
 }
