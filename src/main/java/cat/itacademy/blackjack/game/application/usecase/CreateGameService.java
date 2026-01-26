@@ -31,7 +31,7 @@ public class CreateGameService implements CreateGameUseCase {
                 .flatMap(playerInfo -> {
                     Game game = Game.start(
                             GameId.newId(),
-                            playerInfo.id(),
+                            playerInfo.domainId(),
                             deckFactory.create()
                     );
                     return gameRepository.save(game);

@@ -30,7 +30,7 @@ class PlayerLookupAdapterTest {
 
         StepVerifier.create(adapter.findById("123"))
                 .assertNext(info -> {
-                    assertThat(info.id()).isEqualTo("123");
+                    assertThat(info.domainId()).isEqualTo("123");
                     assertThat(info.name()).isEqualTo("Pau");
                     assertThat(info.score()).isEqualTo(50);
                 })

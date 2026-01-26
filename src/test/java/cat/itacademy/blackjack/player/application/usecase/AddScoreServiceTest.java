@@ -38,7 +38,7 @@ class AddScoreServiceTest {
 
         StepVerifier.create(addScoreService.addScore(id.value(), 10))
                 .assertNext(response -> {
-                    assertThat(response.id()).isEqualTo(id.value());
+                    assertThat(response.domainId()).isEqualTo(id.value());
                     assertThat(response.name()).isEqualTo("Pau");
                     assertThat(response.score()).isEqualTo(10);
                 })

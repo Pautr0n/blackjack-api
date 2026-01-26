@@ -58,7 +58,7 @@ class CreateGameServiceTest {
 
         StepVerifier.create(createGameService.create(playerId))
                 .assertNext(game -> {
-                    assertThat(game.playerId()).isEqualTo(existingPlayer.id());
+                    assertThat(game.playerId()).isEqualTo(existingPlayer.domainId());
                     assertThat(game.status()).isEqualTo(GameStatus.IN_PROGRESS);
                 })
                 .verifyComplete();

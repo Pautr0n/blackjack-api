@@ -21,7 +21,7 @@ public class PlayerQueryRepositoryAdapter implements PlayerQueryRepository {
 
     @Override
     public Mono<PlayerSummary> findById(String playerId) {
-        return springRepo.findById(playerId)
+        return springRepo.findByDomainId(playerId)
                 .map(this::toSummary);
     }
 
