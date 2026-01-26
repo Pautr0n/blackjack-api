@@ -20,8 +20,7 @@ public class PlayerApiMapper {
         return new PlayerResponse(
                 entry.id(),
                 entry.name(),
-                entry.score(),
-                entry.position()
+                entry.score()
         );
     }
 
