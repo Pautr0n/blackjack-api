@@ -24,8 +24,8 @@ class GetRankingServiceTest {
 
     @Test
     void shouldReturnRanking() {
-        PlayerRankingEntry p1 = new PlayerRankingEntry("1", "Pau", 100, 1);
-        PlayerRankingEntry p2 = new PlayerRankingEntry("2", "Anna", 80, 2);
+        PlayerRankingEntry p1 = new PlayerRankingEntry("1", "Pau", 100);
+        PlayerRankingEntry p2 = new PlayerRankingEntry("2", "Anna", 80);
 
         when(playerQueryRepository.getRanking()).thenReturn(Flux.just(p1, p2));
 
@@ -34,13 +34,11 @@ class GetRankingServiceTest {
                     assertThat(entry.id()).isEqualTo("1");
                     assertThat(entry.name()).isEqualTo("Pau");
                     assertThat(entry.score()).isEqualTo(100);
-                    assertThat(entry.position()).isEqualTo(1);
                 })
                 .assertNext(entry -> {
                     assertThat(entry.id()).isEqualTo("2");
                     assertThat(entry.name()).isEqualTo("Anna");
                     assertThat(entry.score()).isEqualTo(80);
-                    assertThat(entry.position()).isEqualTo(2);
                 })
                 .verifyComplete();
 

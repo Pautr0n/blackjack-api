@@ -66,8 +66,7 @@ class PlayerControllerTest {
                 .expectBody()
                 .jsonPath("$.id").isEqualTo("123")
                 .jsonPath("$.name").isEqualTo("Pau")
-                .jsonPath("$.score").isEqualTo(0)
-                .jsonPath("$.position").doesNotExist();
+                .jsonPath("$.score").isEqualTo(0);
     }
 
     @Test
@@ -104,7 +103,7 @@ class PlayerControllerTest {
 
     @Test
     void ranking_returnsListOfPlayers() {
-        PlayerRankingEntry entry = new PlayerRankingEntry("1", "Pau", 50, 1);
+        PlayerRankingEntry entry = new PlayerRankingEntry("1", "Pau", 50);
 
         when(getRanking.getRanking())
                 .thenReturn(Flux.just(entry));
@@ -116,8 +115,7 @@ class PlayerControllerTest {
                 .expectBody()
                 .jsonPath("$[0].id").isEqualTo("1")
                 .jsonPath("$[0].name").isEqualTo("Pau")
-                .jsonPath("$[0].score").isEqualTo(50)
-                .jsonPath("$[0].position").isEqualTo(1);
+                .jsonPath("$[0].score").isEqualTo(50);
     }
 
     @Test
