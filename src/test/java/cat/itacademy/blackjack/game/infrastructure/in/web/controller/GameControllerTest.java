@@ -3,6 +3,7 @@ package cat.itacademy.blackjack.game.infrastructure.in.web.controller;
 import cat.itacademy.blackjack.game.domain.model.Deck;
 import cat.itacademy.blackjack.game.domain.model.Game;
 import cat.itacademy.blackjack.game.domain.model.GameId;
+import cat.itacademy.blackjack.game.domain.model.GameStatus;
 import cat.itacademy.blackjack.game.domain.model.exception.GameNotFoundException;
 import cat.itacademy.blackjack.game.domain.port.in.CreateGameUseCase;
 import cat.itacademy.blackjack.game.domain.port.in.DeleteGameUseCase;
@@ -191,6 +192,73 @@ class GameControllerTest {
                 .bodyValue(new CreateGameRequest("   "))
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
+    @Test
+    void createGame_with_blank_playerId_returns400() {
+        webTestClient.post()
+                .uri("/game/new")
+                .bodyValue(new CreateGameRequest("   "))  // Blank playerId
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void createGame_with_null_playerId_returns400() {
+        webTestClient.post()
+                .uri("/game/new")
+                .bodyValue("{\"playerId\": null}")  // Null playerId
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void playMove_with_blank_moveType_returns400() {
+        webTestClient.post()
+                .uri("/game/g1/play")
+                .bodyValue(new PlayRequest("   "))  // Blank moveType
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void playMove_with_invalid_moveType_returns400() {
+        webTestClient.post()
+                .uri("/game/g1/play")
+                .bodyValue(new PlayRequest("INVALID_MOVE"))  // Invalid moveType
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void playMove_with_illegal_game_state_returns400() {
+        Game finishedGame = Game.start(
+                new GameId("g1"),
+                playerId,
+                new Deck(Deck.standard52Cards())
+        );
+        Game finished = Game.restore(
+                finishedGame.id(),
+                finishedGame.playerId(),
+                finishedGame.playerHand(),
+                finishedGame.dealerHand(),
+                finishedGame.deck(),
+                GameStatus.PLAYER_WINS
+        );
+
+        when(playMove.play(eq("g1"), any()))
+                .thenReturn(Mono.error(
+                        new cat.itacademy.blackjack.game.domain.model.exception.IllegalGameStateException(
+                                "Cannot hit when game is not in progress"
+                        )
+                ));
+
+        webTestClient.post()
+                .uri("/game/g1/play")
+                .bodyValue(new PlayRequest("HIT"))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.code").isEqualTo("ILLEGAL_GAME_STATE");
     }
 
 }
