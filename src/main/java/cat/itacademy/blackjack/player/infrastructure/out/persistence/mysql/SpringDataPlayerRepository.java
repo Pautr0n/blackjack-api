@@ -7,4 +7,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface SpringDataPlayerRepository extends ReactiveCrudRepository<PlayerEntity, String> {
     Mono<PlayerEntity> findByDomainId(String domainId);
+    Mono<Void> deleteByDomainId(String domainId);
 }

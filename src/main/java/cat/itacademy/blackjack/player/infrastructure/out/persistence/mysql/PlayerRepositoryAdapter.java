@@ -25,14 +25,26 @@ public class PlayerRepositoryAdapter implements PlayerRepository {
 
     @Override
     public Mono<Player> save(Player player) {
-        PlayerEntity entity = PlayerMapper.toEntity(player);
-        return repository.save(entity)
+        String domainId = player.id().value();
+        return repository.findByDomainId(domainId)
+                .defaultIfEmpty(new PlayerEntity(
+                        null,
+                        domainId,
+                        player.name(),
+                        player.score()
+                ))
+                .flatMap(existing->{
+                    existing.setDomainId(domainId);
+                    existing.setName(player.name());
+                    existing.setScore(player.score());
+                    return repository.save(existing);
+                })
                 .map(PlayerMapper::toDomain);
     }
 
     @Override
     public Mono<Void> deleteById(PlayerId id) {
-        return repository.deleteById(id.value());
+        return repository.deleteByDomainId(id.value());
     }
 
 }
