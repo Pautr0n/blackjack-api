@@ -4,6 +4,7 @@ import cat.itacademy.blackjack.game.domain.model.exception.GameNotFoundException
 import cat.itacademy.blackjack.game.domain.model.exception.IllegalGameStateException;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerNameException;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerScoreException;
+import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerTotalGamesException;
 import cat.itacademy.blackjack.player.domain.model.exception.PlayerNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -41,6 +42,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidPlayerScoreException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Mono<ErrorResponse> handleInvalidPlayerScore(InvalidPlayerScoreException ex) {
+        return Mono.just(new ErrorResponse(
+                "INVALID_PLAYER_SCORE",
+                ex.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(InvalidPlayerTotalGamesException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Mono<ErrorResponse> handleInvalidPlayerTotalGames(InvalidPlayerScoreException ex) {
         return Mono.just(new ErrorResponse(
                 "INVALID_PLAYER_SCORE",
                 ex.getMessage()
