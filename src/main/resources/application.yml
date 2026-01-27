@@ -1,12 +1,12 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/blackjack
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/blackjack}
 
   r2dbc:
-    url: r2dbc:mysql://localhost:3306/blackjack
-    username: blackjack
-    password: blackjack
+    url: ${SPRING_RDBMS_URL:rdbc:mysql://localhost:3306/blackjack}
+    username: ${SPRING_R2DBC_USERNAME:blackjack}
+    password: ${SPRING_R2DBC_PASSWORD:blackjack}
 
   sql:
     init:

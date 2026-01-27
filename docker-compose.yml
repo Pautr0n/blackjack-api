@@ -28,6 +28,19 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  app:
+    image: blackjack-api:latest
+    depends_on:
+      - mongodb
+      - mysql
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/blackjack
+      SPRING_R2DBC_URL: r2dbc:mysql://mysql:3306/blackjack
+      SPRING_R2DBC_USERNAME: blackjack
+      SPRING_R2DBC_PASSWORD: blackjack
+    ports:
+      - "8080:8080"
+
 volumes:
   mongo_data:
   mysql_data:

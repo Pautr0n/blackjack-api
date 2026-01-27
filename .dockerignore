@@ -1,0 +1,26 @@
+# Maven
+target/
+.mvn/
+.idea/
+*.iml
+
+# Git
+.git
+.gitignore
+
+# OS / IDE noise
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Node / frontend (if any)
+node_modules/
+dist/
+build/
+
+# Docker
+Dockerfile
+docker-compose.yml
