@@ -23,7 +23,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ghcr.io/pautr0n/blackjack-api:${{ steps.vars.outputs.TAG }} .
-          docker tag ghcr.io/pautr0n/blackjack-api:${{ steps.vars.outputs.TAG }} ghcr.io/pautr0n/5.1-blackjack-api:latest
+          docker tag ghcr.io/pautr0n/blackjack-api:${{ steps.vars.outputs.TAG }} ghcr.io/pautr0n/blackjack-api:latest
 
       - name: Push Docker image (versioned)
         run: docker push ghcr.io/pautr0n/blackjack-api:${{ steps.vars.outputs.TAG }}
