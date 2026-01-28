@@ -4,7 +4,7 @@ spring:
       uri: ${SPRING_DATA_MONGODB_URI}
 
   r2dbc:
-    url: ${SPRING_R2DBMS_URL}
+    url: ${SPRING_R2DBC_URL}
     username: ${SPRING_R2DBC_USERNAME}
     password: ${SPRING_R2DBC_PASSWORD}
 
